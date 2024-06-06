@@ -1,18 +1,30 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, onMounted, onUpdated} from "vue";
+import { useRouter, useRoute } from "vue-router";
+const router = useRouter();
+const route = useRoute();
+import LineListe from './LineListe.vue';
 
-const props = defineProps(['taskAdded']);
 
 const list = ref([]);
-watch(
-()=>props.taskAdded,
-()=>{
-  list.value.push(props.taskAdded)
-}
 
-);
+onMounted(()=>{
+  const istaskExist = list.value.find((item) =>{
+    return item.title === route.query.title
+  })
+  if(!istaskExist && route.query.title !== undefined){
+    list.value.push(route.query)
+  }
+});
 
-
+onUpdated(()=>{
+  const istaskExist = list.value.find((item) =>{
+    return item.title === route.query.title
+  });
+  if(!istaskExist && route.query.title !== undefined){
+    list.value.push(route.query)
+  }
+});
 </script>
 <template>
     
@@ -24,13 +36,7 @@ watch(
       </button>
     </div>
       <ul>
-        <li v-for="item in list" :key="item.id" class="w-1/2 flex-col  space-x-10 space-y-10">
-            {{ item.id }} {{ item.title }} {{ item.date }}
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Voir</button>
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Modifier</button>
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Supprimer</button>
-            
-        </li>
+        <LineListe :task="item" v-for="item in list" :key="item.id"></LineListe>
       </ul>
     </div>
 </template>

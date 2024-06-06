@@ -1,15 +1,24 @@
 <script setup>
 import { ref } from 'vue';
+
+
+import { useRoute, useRouter } from "vue-router";
+const route = useRoute();
+const router = useRouter();
+
 defineEmits(['add-task']);
 const data = ref({});
-
+function redirectToCreate(data) {
+  router.push({name: 'list', query: data})
+  
+}
 </script>
 
 
 
 <template>
 <div class="w-full max-w-xs">
-  <form @submit.prevent="$emit('add-task', data)" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+  <form @submit.prevent="redirectToCreate(data)" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
     <div class="mb-4">
       <label class="block text-gray-700 text-sm font-bold mb-2" for="title">
         Titre
