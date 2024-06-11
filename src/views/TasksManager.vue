@@ -13,11 +13,7 @@
 
     </nav>
     <div>
-        <RouterView v-slot="{Component}">
-            <KeepAlive>
-                <component :is="Component"></component>
-            </KeepAlive>
-        </RouterView>
+        <RouterView></RouterView>
     </div>
 </template>
 

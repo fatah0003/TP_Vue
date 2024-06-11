@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import TasksManager from '@/views/TasksManager.vue'
 import UsersManager from '@/views/UsersManager.vue'
 import FormComponent from '@/components/FormComponent.vue'
+import FormEditComponent from '@/components/FormEditComponent.vue'
+
 import ListComponent from '@/components/ListComponent.vue'
 
 
@@ -24,6 +26,11 @@ const router = createRouter({
           path: 'taskList',
           name: 'list',
           component: ListComponent
+        },
+        {
+          path: ':id/edit',
+          name: 'editTask',
+          component: FormEditComponent
         }
       ]
     },

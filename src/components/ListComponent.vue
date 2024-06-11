@@ -1,43 +1,45 @@
 <script setup>
-import { ref, onMounted, onUpdated} from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useTasksStore } from "@/stores/tasks";
 const router = useRouter();
-const route = useRoute();
-import LineListe from './LineListe.vue';
 
+const taskStore = useTasksStore();
 
-const list = ref([]);
+// function show(id){
+//   router.push({name: 'show', params: {id: id}})
+// }
 
-onMounted(()=>{
-  const istaskExist = list.value.find((item) =>{
-    return item.title === route.query.title
-  })
-  if(!istaskExist && route.query.title !== undefined){
-    list.value.push(route.query)
-  }
-});
+// const list = ref([]);
+function removeTask(id) {
+  taskStore.remove(id);
+}
+function update(taskId){
+  router.push({name: 'editTask', params: {id: taskId}})
 
-onUpdated(()=>{
-  const istaskExist = list.value.find((item) =>{
-    return item.title === route.query.title
-  });
-  if(!istaskExist && route.query.title !== undefined){
-    list.value.push(route.query)
-  }
-});
+}
+
 </script>
 <template>
     
     <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
        <div class=" flex space-x-10 "> 
         <h2>TODO LIST</h2>
-    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-       Ajouter
-      </button>
+        <div> Nombre de taches terminées : {{ taskStore.dones }}</div>
     </div>
-      <ul>
-        <LineListe :task="item" v-for="item in list" :key="item.id"></LineListe>
+      <ul v-for="item in taskStore.tasks" :key="item.id">
+
+        <li class="w-1/2 flex-col  space-x-10 space-y-10">
+            {{ item.id }} {{ item.title }} {{ item.date }}
+            <button @click="showHide()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Voir</button>
+            
+            <button @click="update(item.id)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Modifier</button>
+            
+            <button @click="removeTask(item.id)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Supprimer</button>
+        </li>
+        
       </ul>
+      
     </div>
 </template>
 
