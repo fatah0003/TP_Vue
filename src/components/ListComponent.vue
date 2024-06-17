@@ -5,15 +5,23 @@ import { useTasksStore } from "@/stores/tasks";
 const router = useRouter();
 
 const taskStore = useTasksStore();
+taskStore.getTasks();
+
+function remove(taskId){
+  taskStore.removeTask(taskId); 
+  taskStore.getTasks()
+}
+
+
 
 // function show(id){
 //   router.push({name: 'show', params: {id: id}})
 // }
 
 // const list = ref([]);
-function removeTask(id) {
-  taskStore.remove(id);
-}
+// function removeTask(id) {
+//   taskStore.remove(id);
+// }
 function update(taskId){
   router.push({name: 'editTask', params: {id: taskId}})
 
@@ -30,12 +38,13 @@ function update(taskId){
       <ul v-for="item in taskStore.tasks" :key="item.id">
 
         <li class="w-1/2 flex-col  space-x-10 space-y-10">
-            {{ item.id }} {{ item.title }} {{ item.date }}
-            <button @click="showHide()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Voir</button>
+            <!-- {{ item.id }}  -->
+            {{ item.title }} {{ item.date }}
+            <button @click="taskStore.showDetails(item.id)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Voir</button>
             
             <button @click="update(item.id)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Modifier</button>
             
-            <button @click="removeTask(item.id)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Supprimer</button>
+            <button @click="remove(item.id)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Supprimer</button>
         </li>
         
       </ul>

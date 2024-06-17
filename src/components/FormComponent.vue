@@ -3,15 +3,16 @@ import { ref } from 'vue';
 import { useTasksStore } from "@/stores/tasks";
 
 import { useRouter } from "vue-router";
-const store = useTasksStore();
+
+const data = ref({});
 const router = useRouter();
 
-defineEmits(['add-task']);
-const data = ref({});
+const taskStore = useTasksStore();
+
+
+
 function addTask(data) {
-  data.id = Date.now();
-  data.status = 'waiting';
-  store.create(data);
+  taskStore.addTask(data)
   router.push({name: 'list'})
 }
 

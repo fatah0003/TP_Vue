@@ -2,28 +2,59 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
 export const useTasksStore = defineStore('tasks', () => {
-  //definir une proprieté
-  const tasks = ref([])
-  //definir une proprieté derivée
-  const dones = computed(() => {
-    const result = tasks.value.filter((task) => {
-      return task.status === 'done'
+  // définir tasks
+  const tasks = ref();
+  // getTasks
+  function getTasks() {
+    fetch('https://todolist-api.rema-tech.fr/api/tasks')
+    .then((response) => {
+      response.json().then((data) => {
+        tasks.value = data['hydra:member']
+      })
     })
-    return result.length
+  }
+  // addTask
+  function addTask(newtask) {
+    fetch('https://todolist-api.rema-tech.fr/api/tasks', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/ld+json'
+      },
+      body: JSON.stringify(newtask)
+    }).then((response) => {
+      response.json().then((data) => {
+        console.log(data)
+        // tasks.value = data['hydra:member']
+      })
+    })
+  }
+  // removeTask
+  function removeTask(taskId) {
+    fetch(`https://todolist-api.rema-tech.fr/api/tasks/${taskId}`, {
+      method: 'DELETE'
+    });
+  }
+
+  //showDetails
+  function showDetails(taskId){
+fetch(`https://todolist-api.rema-tech.fr/api/tasks/${taskId}`)
+.then((response) => {
+  response.json().then((data) => {
+    tasks.value = data['hydra:member']
   })
-  //definir les méthodes
-
-  //ajouter une tache
-  function create(task) {
-    tasks.value.push(task)
+})
   }
-  // supprimer une tache
-  function remove(id) {
-    tasks.value = tasks.value.filter(task => task.id !== id);
-  }
+  // updateTask
+  // function updateTask (taskId){
+  //   fetch(`https://todolist-api.rema-tech.fr/api/tasks/${taskId}`, {
+  //     method: 'PATCH'
+  //   });
+  // }
+  // définir loading
+  // définir error
+  // définir les Actions
 
-  //modifier une tache
- 
+  // updateTask
 
-  return { tasks, dones, create, remove }
+  return { tasks, getTasks, addTask, removeTask, showDetails }
 })
