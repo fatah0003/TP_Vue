@@ -5,6 +5,13 @@ import FormComponent from '@/components/FormComponent.vue'
 import FormEditComponent from '@/components/FormEditComponent.vue'
 
 import ListComponent from '@/components/ListComponent.vue'
+import DetailsComponent from '@/components/DetailsComponent.vue'
+import UsersList from '@/components/UsersList.vue'
+import FormUsers from '@/components/FormUsers.vue'
+
+
+
+
 
 
 
@@ -25,11 +32,16 @@ const router = createRouter({
         {
           path: 'taskList',
           name: 'list',
-          component: ListComponent
+          component: ListComponent,
+        },
+        {
+          path: 'details/:id',
+          name: 'detail',
+          component: DetailsComponent
         },
         {
           path: ':id/edit',
-          name: 'editTask',
+          name: 'edit',
           component: FormEditComponent
         }
       ]
@@ -37,7 +49,19 @@ const router = createRouter({
     {
       path: '/user',
       name: 'users',
-      component: UsersManager
+      component: UsersManager,
+      children: [
+        {
+          path: 'userslist',
+          name: 'userlist',
+          component: UsersList
+        },
+        {
+          path: 'add',
+          name: 'newuser',
+          component: FormUsers
+        }
+      ]
     }
   ]
 })
